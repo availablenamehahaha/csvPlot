@@ -29,13 +29,13 @@ class canData:
         out = ""
         if is_valid_hex_string(self.data) is None:
             return None
-        for i in data:
+        for i in self.data:
             out += binDict.get(i)
         return out
 
 
 class transRule:
-    def __init__(self, ID, name="", begin=0, bits=16, signed=True, pu=1, offset=0, intel=True):
+    def __init__(self, ID, name="", begin=0, bits=16, signed=True, pu=1.0, offset=0, intel=True, color=""):
         self.ID = ID
         self.name = name
         self.begin = begin
@@ -44,6 +44,12 @@ class transRule:
         self.pu = pu
         self.offset = offset
         self.intel = intel
+        self.color = color
+        self.timeList = []
+        self.dataList = []
+
+    def __str__(self):
+        return f'ID:{self.ID}\tName:{self.name}\tBegin:{self.begin}\tBits:{self.bits}\tSigned:{self.signed}\tPu:{self.pu}\tOffset:{self.offset}\tIntel:{self.intel}'
 
 
 class dataTrans:
@@ -55,7 +61,7 @@ class dataTrans:
         binTemp = self.data[self.rule.begin:self.rule.begin + self.rule.bits]
         # print(binTemp)
         dataTemp = Bin2Dec(binTemp, self.rule.signed, self.rule.intel) * self.rule.pu + self.rule.offset
-        return dataTemp
+        return float(dataTemp)
 
 
 def Bin2Dec(binStrIn: str, signed=True, intel=True):
@@ -68,7 +74,7 @@ def Bin2Dec(binStrIn: str, signed=True, intel=True):
             byte_value = int(binStr[i * 8:(i + 1) * 8], 2)
             byte_array.append(byte_value)
         single_byte_object = bytes(byte_array)
-        print(single_byte_object)
+        # print(single_byte_object)
         format_string = ''
         if intel:
             format_string = '<'
@@ -85,7 +91,7 @@ def Bin2Dec(binStrIn: str, signed=True, intel=True):
             byte_value = int(binStr[i * 8:(i + 1) * 8], 2)
             byte_array.append(byte_value)
         single_byte_object = bytes(byte_array)
-        print(single_byte_object)
+        # print(single_byte_object)
         format_string = ''
         if intel:
             format_string = '<'
@@ -102,7 +108,7 @@ def Bin2Dec(binStrIn: str, signed=True, intel=True):
             byte_value = int(binStr[i * 8:(i + 1) * 8], 2)
             byte_array.append(byte_value)
         single_byte_object = bytes(byte_array)
-        print(single_byte_object)
+        # print(single_byte_object)
         format_string = ''
         if intel:
             format_string = '<'
@@ -118,7 +124,7 @@ def Bin2Dec(binStrIn: str, signed=True, intel=True):
         byte_value = int(binStr[0:8], 2)
         byte_array.append(byte_value)
         single_byte_object = bytes(byte_array)
-        print(single_byte_object)
+        # print(single_byte_object)
         format_string = ''
         if intel:
             format_string = '<'
@@ -132,12 +138,14 @@ def Bin2Dec(binStrIn: str, signed=True, intel=True):
     return signed_integer
 
 
-data = '471B000000004C50'
-q = canData(data).hexStr2binStr()
-rule = transRule("电压", 0, 16)
-print(dataTrans(q, rule).out())
-
-data = '471B000000004C50'
-q = canData(data).hexStr2binStr()
-rule = transRule("温度", 48, 8, False, 1, -50)
-print(dataTrans(q, rule).out())
+if __name__ == "main":
+    pass
+    # data = '471B000000004C50'
+    # q = canData(data).hexStr2binStr()
+    # rule = transRule("18EF1120", "电压", 0, 16, True, 0.1, 0)
+    # print(dataTrans(q, rule).out())
+    #
+    # data = '471B000000004C50'
+    # q = canData(data).hexStr2binStr()
+    # rule = transRule("18EF1120", "温度", 48, 8, False, 1.0, -50)
+    # print(dataTrans(q, rule).out())

@@ -44,20 +44,23 @@ class sanUI(QMainWindow):
                                                    "Excel Files (*.xlsx *.xls);;All Files (*)", options=options)
 
         # file_name = 'example.xlsx'
-        if file_name:
-            df = pd.read_excel(file_name)
-            self.ruleList = ruleListAdd(df)
-            # 设置表格的行数和列数
-            self.ui.table.setRowCount(len(df))
-            self.ui.table.setColumnCount(len(df.columns))
-            # 设置表格的列标题
-            for col in range(len(df.columns)):
-                self.ui.table.setHorizontalHeaderItem(col, QTableWidgetItem(df.columns[col]))
-            # 填充表格数据
-            for row in range(len(df)):
+        try:
+            if file_name:
+                df = pd.read_excel(file_name)
+                self.ruleList = ruleListAdd(df)
+                # 设置表格的行数和列数
+                self.ui.table.setRowCount(len(df))
+                self.ui.table.setColumnCount(len(df.columns))
+                # 设置表格的列标题
                 for col in range(len(df.columns)):
-                    self.ui.table.setItem(row, col, QTableWidgetItem(str(df.iat[row, col])))
-            self.tableInit = True
+                    self.ui.table.setHorizontalHeaderItem(col, QTableWidgetItem(df.columns[col]))
+                # 填充表格数据
+                for row in range(len(df)):
+                    for col in range(len(df.columns)):
+                        self.ui.table.setItem(row, col, QTableWidgetItem(str(df.iat[row, col])))
+                self.tableInit = True
+        except:
+            QMessageBox.warning(self, '警告', '解析表格导入失败')
 
     def itemChanged(self, row, column):
         # print(f"行数:{row}列数:{column}")

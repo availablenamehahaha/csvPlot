@@ -6,7 +6,7 @@ patternDict = {'Name': r".*", 'PLOT': r"^[0-3]$", 'Color': r"^[r,g,b,y,c,m,k,w]$
                'First': r"^(?:0|[1-9]|[1-5]\d|6[0-3])$", 'Bits': r"^(?:0|[1-9]|[1-5]\d|6[0-3])$",
                'Signed': r"^[0-1]$", 'Pu': r"^-?\d+(\.\d+)?$", 'Offset': r"^-?\d+(\.\d+)?$", 'intel': r"^[0-1]$"}
 
-titleList = ['Name', 'ID', 'PLOT', 'Color', 'First', 'Bits', 'Signed', 'Pu', 'Offset', 'intel']
+titleList = ['Name', 'PLOT', 'Color', 'ID', 'First', 'Bits', 'Signed', 'Pu', 'Offset', 'intel']
 
 
 def ruleListAdd(df):
@@ -18,7 +18,9 @@ def ruleListAdd(df):
     num_cols = len(df.columns)
     print(f'行数: {num_rows}')
     print(f'列数: {num_cols}')
-    headers = df.columns.tolist()
+    df.columns = titleList
+    headers = titleList
+    # headers = df.columns.tolist()
     print(f'表头{headers}')
     for head in headers:
         if head not in titleList:
